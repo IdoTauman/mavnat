@@ -8,11 +8,11 @@ typedef struct Arena Arena;
 
 /**
  * Creates a new arena.
- * @param chunk_size The size of each memory block (e.g., 4096).
+ * @param block_size The size of each memory block (e.g., 4096).
  *                   If a single allocation exceeds this, the arena 
  *                   should handle it by allocating a larger custom block.
  */
-Arena *mavnat_arena_init(size_t chunk_size);
+Arena *mavnat_arena_init(size_t block_size);
 
 /**
  * Allocates memory from the arena.

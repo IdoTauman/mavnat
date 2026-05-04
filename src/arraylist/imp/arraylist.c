@@ -61,29 +61,29 @@ void mavnat_arraylist_push(ArrayList *list, void *element) {
     list->size++;
 }
 
-void *mavnat_arraylist_pop(ArrayList *list) {
+inline void *mavnat_arraylist_pop(ArrayList *list) {
     if (list->size == 0) return NULL;
     return list->data[--list->size];
 }
 
-void *mavnat_arraylist_get(ArrayList *list, size_t index) {
+inline void *mavnat_arraylist_get(ArrayList *list, size_t index) {
     assert(index < list->size);
     return list->data[index];
 }
 
-void mavnat_arraylist_set(ArrayList *list, size_t index, void *element) {
+inline void mavnat_arraylist_set(ArrayList *list, size_t index, void *element) {
     assert(index < list->size);
     list->data[index] = element;
 }
 
-size_t mavnat_arraylist_size(ArrayList *list) {
+inline size_t mavnat_arraylist_size(ArrayList *list) {
     return list->size;
 }
 
-size_t mavnat_arraylist_capacity(ArrayList *list) {
+inline size_t mavnat_arraylist_capacity(ArrayList *list) {
     return list->capacity;
 }
 
-void mavnat_arraylist_clear(ArrayList *list) {
+inline void mavnat_arraylist_clear(ArrayList *list) {
     list->size = 0;
 }

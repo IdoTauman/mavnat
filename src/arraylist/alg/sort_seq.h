@@ -14,20 +14,11 @@
 void mavnat_arraylist_insertionsort(ArrayList *list, mavnat_compare_fn cmp);
 
 /**
- * Performs a quicksort on an arraylist.
- * Time complexity: O(n^2) worst case, O(nlogn) average case.
- * Space complexity: O(n)
- * @param list The arraylist to sort
- * @param cmp  The comparison function to determine order
- */
-void mavnat_arraylist_insertionsort(ArrayList *list, mavnat_compare_fn cmp);
-
-/**
  * Performs a highly optimized, in-place sequential sort on the arraylist.
- * (Will be implemented as Introsort: QuickSort with a HeapSort fallback).
+ * (Will be implemented as Introsort: QuickSort with a insertion sort fallback).
  * Time complexity: O(n log n) worst/average case.
  * Space complexity: O(log n) auxiliary stack space.
- * * @param list The arraylist to sort
+ * @param list The arraylist to sort
  * @param cmp  The comparison function to determine order
  */
 void mavnat_arraylist_sort(ArrayList *list, mavnat_compare_fn cmp);

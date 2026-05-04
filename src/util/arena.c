@@ -6,6 +6,8 @@
 
 #define DEFAULT_ALIGN 8
 
+#define mavnat_unlikely(x) __builtin_expect(!!(x), 0)
+
 /**
  * Internal block structure to manage the linked list of memory chunks.
  */
@@ -32,7 +34,7 @@ struct Arena {
  */
 static void *mavnat_malloc(size_t size) {
     void *block = malloc(size);
-    if (!block) {
+    if (mavnat_unlikely(!block)) {
         fprintf(stderr, "FATAL: Out of memory");
         exit(1);
     }
@@ -44,7 +46,7 @@ static void *mavnat_malloc(size_t size) {
  */
 static void *mavnat_calloc(size_t size) {
     void *block = calloc(1, size);
-    if (!block) {
+    if (mavnat_unlikely(!block)) {
         fprintf(stderr, "FATAL: Out of memory");
         exit(1);
     }

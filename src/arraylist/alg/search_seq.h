@@ -15,10 +15,11 @@ size_t mavnat_arraylist_linsearch(ArrayList *list, void *element, mavnat_compare
 /**
  * Performs a linear search over the arraylist with AVX512.
  * Note: this is much faster than regular linear search.
+ * Note: this only works with pointer identity comparison so it doesn't take a comparator.
  * Time complexity: O(n)
  * Space complexity: O(1)
  */
-size_t mavnat_arraylist_linsearch_avx512(ArrayList *list, void *element, mavnat_compare_fn cmp);
+size_t mavnat_arraylist_linsearch_avx512(ArrayList *list, void *element);
 
 /**
  * Performs a binary search over the arraylist.

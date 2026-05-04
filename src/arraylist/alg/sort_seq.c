@@ -1,5 +1,6 @@
 #include "sort_seq.h"
 #include "../imp/arraylist_internal.h"
+#include <assert.h>
 
 #define INSERTION_THRESHOLD 16
 

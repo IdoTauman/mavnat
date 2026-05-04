@@ -1,8 +1,15 @@
 #include "sort_seq.h"
 #include "../imp/arraylist_internal.h"
-#include <assert.h>
+#include <assert.h> // Required for assert()
+#include <stddef.h>
 
 #define INSERTION_THRESHOLD 16
+
+#define MAVNAT_SWAP_PTRS(a, b) do { \
+    void *tmp = (a);                \
+    (a) = (b);                      \
+    (b) = tmp;                      \
+} while(0)
 
 #define mavnat_unlikely(x) __builtin_expect(!!(x), 0)
 #define mavnat_likely(x)   __builtin_expect(!!(x), 1)
@@ -24,6 +31,7 @@ static void _mavnat_insertionsort_internal(void **data, size_t low, size_t high,
 
 void mavnat_arraylist_insertionsort(ArrayList *list, mavnat_compare_fn cmp) {
     assert(list != NULL && cmp != NULL);
+    if (list->size <= 1) return;
     _mavnat_insertionsort_internal(list->data, 0, list->size - 1, cmp);
 }
 
@@ -57,7 +65,7 @@ static size_t _mavnat_partition(void **data, size_t low, size_t high, mavnat_com
 }
 
 static void _mavnat_quicksort_internal(void **data, size_t low, size_t high, mavnat_compare_fn cmp) {
-    // use insertion sort for small chunks
+    // Hybrid switch: Use insertion sort for small chunks to stay in L1 cache
     if (high - low < INSERTION_THRESHOLD) {
         _mavnat_insertionsort_internal(data, low, high, cmp);
         return;
@@ -73,5 +81,8 @@ static void _mavnat_quicksort_internal(void **data, size_t low, size_t high, mav
 
 void mavnat_arraylist_sort(ArrayList *list, mavnat_compare_fn cmp) {
     assert(list != NULL && cmp != NULL);
+    
+    if (list->size <= 1) return;
+
     _mavnat_quicksort_internal(list->data, 0, list->size - 1, cmp);
 }

@@ -21,6 +21,7 @@ void *mavnat_arena_alloc(Arena *arena, size_t size);
 
 /**
  * Allocates memory with a specific alignment requirement.
+ * Non power of 2 alignment is undefined behavior.
  */
 void *mavnat_arena_alloc_aligned(Arena *arena, size_t size, size_t align);
 

@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define DEFAULT_ALIGN 8
+
 /**
  * Internal block structure to manage the linked list of memory chunks.
  */
@@ -68,23 +70,63 @@ Arena *mavnat_arena_init(size_t block_size) {
     return new;
 }
 
-void *mavnat_arena_alloc(Arena *arena, size_t size) {
-    size_t block_size = size > arena->block_size ? size : arena->block_size;
+void *mavnat_arena_alloc_aligned(Arena *arena, size_t size, size_t align) {
+    // ensure a block exists
     if (!(arena->head)) {
-        arena->head = mavnat_new_block(block_size, NULL);
+        size_t block_size = size > arena->block_size ? size : arena->block_size;
+        arena->head = mavnat_new_block(block_size + align, NULL);
         arena->tail = arena->head;
     }
 
-    ArenaBlock *tail = arena->tail;
-    size_t space = tail->capacity - tail->used;
-    if (space < size) {
-        arena->tail = mavnat_new_block(block_size, arena->tail);
-        tail = arena->tail;
+    // calculate padding
+    uintptr_t curr_ptr = (uintptr_t)arena->tail->data + arena->tail->used;
+    uintptr_t aligned_ptr = (curr_ptr + align - 1) & ~(align - 1);
+    size_t padding = aligned_ptr - curr_ptr;
+
+    // step forward if the allocation doesnt fit
+    if (arena->tail->used + padding + size > arena->tail->capacity) {
+        size_t block_size = size > arena->block_size ? size : arena->block_size;
+        
+        // check for a reusable block
+        if (arena->tail->next && arena->tail->next->capacity >= size + align) {
+            arena->tail = arena->tail->next;
+        } else {
+            // free orphaned small blocks
+            ArenaBlock *drop = arena->tail->next;
+            while (drop) {
+                ArenaBlock *temp = drop;
+                drop = drop->next;
+                free(temp);
+            }
+            arena->tail->next = mavnat_new_block(block_size + align, arena->tail);
+            arena->tail = arena->tail->next;
+        }
+
+        // change tail pointers
+        curr_ptr = (uintptr_t)arena->tail->data + arena->tail->used;
+        aligned_ptr = (curr_ptr + align - 1) & ~(align - 1);
+        padding = aligned_ptr - curr_ptr;
     }
 
-    void *ptr = (char*)tail->data + tail->used;
-    tail->used += size;
-    return ptr;
+    // update usage
+    arena->tail->used += padding + size;
+    return (void*)aligned_ptr;
+}
+
+void *mavnat_arena_alloc(Arena *arena, size_t size) {
+    return mavnat_arena_alloc_aligned(arena, size, DEFAULT_ALIGN);
+}
+
+void mavnat_arena_reset(Arena *arena) {
+    if (!arena->head) return;
+
+    ArenaBlock *curr = arena->head;
+    while (curr) {
+        curr->used = 0;
+        curr = curr->next;
+    }
+    // move tail back to the start
+    arena->tail = arena->head;
 }
 
 void mavnat_arena_destroy(Arena *arena) {

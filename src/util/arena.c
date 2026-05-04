@@ -30,7 +30,7 @@ struct Arena {
 /**
  * Internal functions that handles malloc errors.
  */
-void *mavnat_malloc(size_t size) {
+static void *mavnat_malloc(size_t size) {
     void *block = malloc(size);
     if (!block) {
         fprintf(stderr, "FATAL: Out of memory");
@@ -42,7 +42,7 @@ void *mavnat_malloc(size_t size) {
 /**
  * Internal function that handles calloc errors.
  */
-void *mavnat_calloc(size_t size) {
+static void *mavnat_calloc(size_t size) {
     void *block = calloc(1, size);
     if (!block) {
         fprintf(stderr, "FATAL: Out of memory");

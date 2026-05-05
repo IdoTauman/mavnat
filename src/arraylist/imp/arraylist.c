@@ -30,7 +30,7 @@ static void mavnat_arraylist_grow(ArrayList *list) {
         exit(2);
     }
 
-    void **new = (void **)mavnat_arena_alloc(list->arena, list->capacity * sizeof(void *));
+    void **new = (void **)mavnat_arena_alloc_aligned(list->arena, list->capacity * sizeof(void *), 64);
     memcpy(new, list->data, list->size * sizeof(void *));
     list->data = new;
 }

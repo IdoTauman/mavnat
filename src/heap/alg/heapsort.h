@@ -18,6 +18,7 @@ void mavnat_heapsort(ArrayList *list, mavnat_compare_fn cmp) {
     }
 
     mavnat_heapify(list, flipped_cmp);
+    void **data = list->data;
     // reverse iteration to save cmp instructions
     for (size_t i = n; i-- > 0;) {
         data[i] = mavnat_heap_pop((Heap*)list, flipped_cmp);

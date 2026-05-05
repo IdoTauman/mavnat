@@ -9,8 +9,6 @@ typedef int (*mavnat_compare_fn)(const void *a, const void *b);
 /* forward declaration, can be a BinaryHeap etc */
 typedef struct Heap Heap;
 
-typedef struct ArrayList BinaryHeap;
-
 /* general heap API */
 Heap*  mavnat_heap_init(Arena *arena, size_t initial_capacity);
 void   mavnat_heap_push(Heap *heap, void *item, mavnat_compare_fn cmp);

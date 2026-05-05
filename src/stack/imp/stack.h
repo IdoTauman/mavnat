@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../arraylist/imp/arraylist.h"
+#include "../../arraylist/imp/arraylist_internal.h"
 #include <stdbool.h>
 #include <assert.h>
 

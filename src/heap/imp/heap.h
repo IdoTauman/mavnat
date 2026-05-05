@@ -2,6 +2,7 @@
 
 #include "../../util/arena.h"
 #include <stddef.h>
+#include <stdbool.h>
 
 typedef int (*mavnat_compare_fn)(const void *a, const void *b);
 
@@ -22,4 +23,4 @@ bool   mavnat_heap_is_empty(const Heap *heap);
  * Reorganizes an ArrayList to a binary heap.
  * @returns same pointer as heap casted to BinaryHeap
  */
-void mavnat_heapify(ArrayList *arr, mavnat_compare_fn cmp);
+void *mavnat_heapify(ArrayList *arr, mavnat_compare_fn cmp);

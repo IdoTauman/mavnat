@@ -67,7 +67,7 @@ void* mavnat_heap_pop(Heap *heap, mavnat_compare_fn cmp) {
     return val;
 }
 
-Heap* mavnat_heapify(ArrayList *arr, mavnat_compare_fn cmp) {
+Heap *mavnat_heapify(ArrayList *arr, mavnat_compare_fn cmp) {
     assert(arr != NULL && cmp != NULL);
 
     // treat the existing ArrayList as the list member of a Heap
